@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+}
+
+#map {
+    height: 500px;
+    width: 500px;
+    margin-left: 20px;
+    margin-top: 20px;
+    box-shadow: 2px 2px 3px 0 #0001;
+}
+
+#myCurrentPosition {
+    width: 35px;
+    height: 35px;
+    background: url('/assets/user_icon_2.png');
+    background-size: cover;
+}
