@@ -1,45 +1,53 @@
 import React from 'react';
+import map from '../utils/map';
 
 let mapWidget = null;
 let currentLocation = [13.452156, 52.496374];
-var popupOffsets = {
-    top: [0, 0],
-    bottom: [0, -40],
-    'bottom-right': [0, -40],
-    'bottom-left': [0, -40],
-    left: [25, -35],
-    right: [-25, -35]
-  }
 
 class Map extends React.Component {
-    addMarker(id, properties) {
-        const element = document.createElement('div');
-        element.id = id;
-
-        const marker = new tt.Marker({element}).setLngLat(properties.coords);
-        const popup = new tt.Popup({offset: popupOffsets}).setHTML(properties.html);
-        marker.setPopup(popup);
-        
-        return marker;
-    }
 
     componentDidMount() {
-        navigator.geolocation.getCurrentPosition(position => {
-            mapWidget = tt.map({
-                source: 'vector',
-                container: 'map',
-                key: 'spDnMSwJq9AAp3YPb2xplyHD2NYc8rvz',
-                center: currentLocation,
-                zoom: 13
-            });
+        this.props.getCurrentPosition()
+            .then(position => {
+                mapWidget = map().createMap('map', {center: currentLocation});
 
-            const marker = this.addMarker('myCurrentPosition', {
-                coords: currentLocation,
-                html: 'You are here!'
+                const marker = map().createMarker('myCurrentPosition', {
+                    coords: currentLocation,
+                    html: 'You are here!'
+                });
+
+                marker.addTo(mapWidget).togglePopup();
+
+                return this.props.getMatches();
+            })
+            .then(matches => {
+                Object.keys(matches).forEach(username => {
+                    const user = matches[username];
+                    
+                    user.username = username;
+
+                    const marker = map().createMarker('user-match', {
+                        coords: [user.long, user.lat],
+                        html: `${user.firstName} ${user.lastName}`,
+                        onClick: () => {
+                            this.props.showDetails(user);
+                        }
+                    });
+
+                    marker.addTo(mapWidget);
+                });
+            });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.currentMeetingPoint !== prevProps.currentMeetingPoint) {
+            const marker = map().createMarker('meeting-point', {
+                coords: [this.props.currentMeetingPoint.long, this.props.currentMeetingPoint.lat],
+                html: `We marked a spot that's close to both of you: <strong>${this.props.currentMeetingPoint.name}</strong>`
             });
 
             marker.addTo(mapWidget).togglePopup();
-        });
+        }
     }
 
     render() {
