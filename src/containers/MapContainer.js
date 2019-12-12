@@ -11,10 +11,6 @@ class MapContainer extends React.Component {
         });
     }
 
-    getMatches() {
-        return ajax('/matches/intp').get();
-    }
-
     render() {
         return (
             <UserContext.Consumer>
@@ -22,7 +18,7 @@ class MapContainer extends React.Component {
                     ctx => (
                         <Map
                             getCurrentPosition={this.getCurrentPosition}
-                            getMatches={this.getMatches}
+                            matches={ctx.matches}
                             showDetails={ctx.showDetails}
                             currentUser={ctx.currentUser}
                             currentMeetingPoint={ctx.currentMeetingPoint}

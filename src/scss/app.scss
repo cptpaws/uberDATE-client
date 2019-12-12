@@ -1,17 +1,101 @@
 html {
     height: 100vh;
+    background: #e4f7ff;
 }
 
 body {
     margin: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
-#map {
-    height: 500px;
-    width: 500px;
-    margin-left: 20px;
-    margin-top: 20px;
-    box-shadow: 2px 2px 3px 0 #0001;
+#app {
+    height: 100%;
+    .ud-layout {
+        height: 100%;
+        margin: 10px;
+        overflow: hidden;
+        
+        .ud-map-container {
+            position: relative;
+            transition: height 200ms ease-out;
+
+            &.maximized {
+                height: calc(100% - 20px);
+            }
+
+            &.minimized {
+                height: 250px;
+            }
+            
+            .button-minimize {
+                position: absolute;
+                bottom: -10px;
+                left: calc(50% - 25px);
+                width: 50px;
+                height: 50px;
+                border-radius: 100%;
+                outline: none;
+                background: #e3644e;
+                border: 2px solid darken(#f55337, 0.6);
+                transition: transform 200ms ease-in-out;
+
+                &::after {
+                    content: ' ';
+                    position: absolute;
+                    border-top: 2px solid white;
+                    border-left: 2px solid white;
+                    border-radius: 3px;
+                    width: 12px;
+                    height: 12px;
+                    transform: rotate(45deg);
+                    top: 19px;
+                    left: 16px;
+                }
+            }
+
+            #map {
+                height: 100%;
+                border-radius: 15px;
+                border: 2px solid #74cefb;
+                box-shadow: 2px 2px 3px 0 #0001;
+            }
+        }
+
+        .ud-details {
+            height: calc(100% - 230px);
+            ul.match-list {
+                list-style-type: none;
+                padding: 0;
+                height: 100%;
+                background: #c9f5ff;
+                margin-top: -20px;
+
+                li.match-entry:first-child {
+                    padding-top: 40px;
+                }
+
+                li.match-entry {
+                    padding: 15px;
+                    padding-left: 25px;
+                    font-family: 'Montserrat', sans-serif;
+                    font-size: 12px;
+                    
+                    &:hover {
+                        background: #c1e7ef;
+                    }
+
+                    .score {
+                        float: right;
+                        span {
+                            font-size: 20px;
+                            vertical-align: middle;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .myCurrentPosition {
@@ -29,8 +113,8 @@ body {
 }
 
 .meeting-point {
-    width: 35px;
-    height: 35px;
+    width: 50px;
+    height: 50px;
     background: url('/assets/768px-Meeting_\(888677\)_-_The_Noun_Project.svg.png');
     background-size: cover;
 }

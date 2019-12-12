@@ -16,6 +16,7 @@ export default props => {
                             if (props.user.liked) {
                                 setLiked(true);
                                 ctx.fetchMeetingPoint(props.user);
+                                ctx.showDetails(null);
                             }
                         }}>
                             Like

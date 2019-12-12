@@ -1,7 +1,7 @@
 import React from 'react';
 import map from '../utils/map';
 
-let mapWidget = null;
+window.mapWidget = null;
 let currentLocation = [13.452156, 52.496374];
 
 class Map extends React.Component {
@@ -17,25 +17,6 @@ class Map extends React.Component {
                 });
 
                 marker.addTo(mapWidget).togglePopup();
-
-                return this.props.getMatches();
-            })
-            .then(matches => {
-                Object.keys(matches).forEach(username => {
-                    const user = matches[username];
-                    
-                    user.username = username;
-
-                    const marker = map().createMarker('user-match', {
-                        coords: [user.long, user.lat],
-                        html: `${user.firstName} ${user.lastName}`,
-                        onClick: () => {
-                            this.props.showDetails(user);
-                        }
-                    });
-
-                    marker.addTo(mapWidget);
-                });
             });
     }
 
@@ -47,6 +28,24 @@ class Map extends React.Component {
             });
 
             marker.addTo(mapWidget).togglePopup();
+        } else if (this.props.matches !== prevProps.matches) {
+            const {matches} = this.props;
+
+            matches && Object.keys(matches).forEach(username => {
+                const user = matches[username];
+                
+                user.username = username;
+
+                const marker = map().createMarker('user-match', {
+                    coords: [user.long, user.lat],
+                    html: `${user.firstName} ${user.lastName}`,
+                    onClick: () => {
+                        this.props.showDetails(user);
+                    }
+                });
+
+                marker.addTo(mapWidget);
+            });
         }
     }
 
